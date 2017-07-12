@@ -1,0 +1,23 @@
+{
+  "name": "node-music-crawler",
+  "version": "1.0.0",
+  "description": "music crawler,write it by node",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/trampboy/node-music-crawler.git"
+  },
+  "keywords": [
+    "crawler",
+    "node"
+  ],
+  "author": "BuErMr",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/trampboy/node-music-crawler/issues"
+  },
+  "homepage": "https://github.com/trampboy/node-music-crawler#readme"
+}
