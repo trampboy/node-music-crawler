@@ -1,3 +1,5 @@
-var crawlHtml = require('./crawl-html')
+'use strict';
 
-crawlHtml.start()
+let playlist  = require('./playlist')
+console.log('Hello, world.')
+playlist.viewCapture(0)
