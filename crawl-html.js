@@ -4,8 +4,7 @@
  */
 
 
-function start() {
-
+function start() {	
 }
 
 exports.start = start

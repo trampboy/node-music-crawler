@@ -7,12 +7,20 @@
 
 var superagent = require("superagent")
 var cheerio = require("cheerio")
+var mysql = require('mysql')
 
-
+var connection = mysql.createConnection({
+  host     : 'localhost',
+  user     : 'root',
+  password : '123456',
+  database : 'my_db'
+})
 
 let playUrl = 'http://music.163.com/discover/playlist/'
 
 function viewCapture(page) {
+	connection.connect()
+
 	let pageOffset = page * 35
 	console.log('url:' + playUrl)
 	superagent
@@ -41,6 +49,13 @@ function viewCapture(page) {
 				var href = $(v).attr('href')
 				console.log('title:'+title)
 				console.log('href:'+href)
+
+				connection.query('SELECT 1 + 1 AS solution', function (error, results, fields) {
+					if (error) throw error;
+					console.log('The solution is: ', results[0].solution);
+				});
+
+				connection.end();
 			})
 		})
 
