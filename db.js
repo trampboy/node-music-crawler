@@ -13,8 +13,11 @@ function init() {
 			return false
 		}
 		return true
-	}
-
+	})
+	
+	createDatabase()
+	createTables()
+	close()
 }
 
 
@@ -47,9 +50,11 @@ function createTables() {
 	query(playlist)
 	query(music)
 	query(comment)
-    print("TABLES RECREATE SUCCESS")
+    console.log("TABLES RECREATE SUCCESS")
 }
 
 function close() {
 	connection.destroy()
 }
+
+exports.init = init
