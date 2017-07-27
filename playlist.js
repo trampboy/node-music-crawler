@@ -5,24 +5,23 @@
  * get playlist from http://music.163.com/discover/playlist/?order=hot&cat=全部&limit=35&offset=
  */
 
-var superagent = require("superagent")
-var cheerio = require("cheerio")
-var mysql = require('mysql')
+var superagent = require('superagent');
+var cheerio = require('cheerio');
+var mysql = require('mysql');
 
 var connection = mysql.createConnection({
-  host     : 'localhost',
-  user     : 'root',
-  password : '123456',
-  database : 'my_db'
-})
+	host     : 'localhost',
+	user     : 'root',
+	password : '123456',
+	database : 'my_db'
+});
 
-let playUrl = 'http://music.163.com/discover/playlist/'
+let playUrl = 'http://music.163.com/discover/playlist/';
 
 function viewCapture(page) {
-	connection.connect()
 
-	let pageOffset = page * 35
-	console.log('url:' + playUrl)
+	let pageOffset = page * 35;
+	console.log('url:' + playUrl);
 	superagent
 		.get(playUrl)
 		.set('Referer', 'http://music.163.com/')
@@ -38,28 +37,32 @@ function viewCapture(page) {
 		.query({ order: 'hot', cat: '全部', limit: '35', offset: pageOffset})
 		.end(function(err, sres){
 			if(err) {
-				console.log('viewCapture err:' + err)
-				return
+				console.log('viewCapture err:' + err);
+				return;
 			}
 			// sres.text have the html data
-			console.log(sres.text)
-			var $ = cheerio.load(sres.text)
+			console.log(sres.text);
+			var $ = cheerio.load(sres.text);
 			$('ul.m-cvrlst.f-cb li p.dec a').each(function(i,v) {
-				var title = $(v).attr('title')
-				var href = $(v).attr('href')
-				console.log('title:'+title)
-				console.log('href:'+href)
-
-				connection.query('SELECT 1 + 1 AS solution', function (error, results, fields) {
-					if (error) throw error;
-					console.log('The solution is: ', results[0].solution);
-				});
-
-				connection.end();
-			})
-		})
+				var title = $(v).attr('title');
+				var href = $(v).attr('href');
+				console.log('title:'+title);
+				console.log('href:'+href);
+				if(!havePlaylist()) {
+					insertPlaylist();
+				}
+			});
+		});
 
 }
 
-exports.viewCapture = viewCapture
+function havePlaylist() {
+
+}
+
+function insertPlaylist() {
+
+}
+
+exports.viewCapture = viewCapture;
 
