@@ -19,5 +19,11 @@
   "bugs": {
     "url": "https://github.com/trampboy/node-music-crawler/issues"
   },
-  "homepage": "https://github.com/trampboy/node-music-crawler#readme"
+  "homepage": "https://github.com/trampboy/node-music-crawler#readme",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.2",
+    "mysql": "^2.14.0",
+    "sprintf-js": "^1.1.1",
+    "superagent": "^3.5.2"
+  }
 }
