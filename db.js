@@ -40,8 +40,8 @@ function query(sql) {
 function createTables() {
 	let dropdbs  = ['drop table if exists playlist163','drop table if exists music163','drop table if exists comment163'];
 	let playlist = 'CREATE TABLE `playlist163` (`id` int(11) NOT NULL AUTO_INCREMENT,`title` varchar(150) DEFAULT \'\',`link` varchar(120) DEFAULT \'\',`create_time` datetime DEFAULT CURRENT_TIMESTAMP,`over` varchar(20) DEFAULT \'N\',PRIMARY KEY (`id`),KEY `over_link` (`over`,`link`)) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4';
-	let music    = 'CREATE TABLE `music163` (`id` int(11) NOT NULL AUTO_INCREMENT,`song_id` int(11) DEFAULT NULL,`song_name` varchar(200) DEFAULT \'\',`author` varchar(350) DEFAULT \'\',`over` varchar(5) DEFAULT \'N\',`create_time` datetime DEFAULT CURRENT_TIMESTAMP,`comment_id` int(11) DEFAULT \'0\',PRIMARY KEY (`id`),KEY `over_id` (`over`,`id`),KEY `author` (`author`),KEY `song_id_comment_id` (`song_id`,`comment_id`)) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4';
-	let comment  = 'CREATE TABLE `comment163` (`id` int(11) NOT NULL AUTO_INCREMENT,`song_id` int(11) DEFAULT NULL,`txt` mediumtext,`author` varchar(100) DEFAULT \'注销\', `liked` int(11) DEFAULT \'0\',PRIMARY KEY (`id`), KEY `liked_song_id` (`liked`,`song_id`), KEY `song_id_liked` (`song_id`,`liked`)) ENGINE=InnoDB AUTO_INCREMENT=1418975 DEFAULT CHARSET=utf8mb4';
+	let music    = 'CREATE TABLE `music163` (`id` int(11) NOT NULL AUTO_INCREMENT,`name` varchar(200) DEFAULT \'\',`song_id` int(11) DEFAULT NULL, `author` varchar(350) DEFAULT \'\',`over` varchar(5) DEFAULT \'N\',`create_time` datetime DEFAULT CURRENT_TIMESTAMP,`comment_id` int(11) DEFAULT \'0\',PRIMARY KEY (`id`),KEY `over_id` (`over`,`id`),KEY `author` (`author`)) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4';
+	let comment  = 'CREATE TABLE `comment163` (`id` int(11) NOT NULL AUTO_INCREMENT,`music_id` int(11) DEFAULT NULL,`txt` mediumtext,`author` varchar(100) DEFAULT \'注销\',PRIMARY KEY (`id`)) ENGINE=InnoDB AUTO_INCREMENT=1418975 DEFAULT CHARSET=utf8mb4';
 
 	dropdbs.forEach(function(sql) {
 		query(sql);
