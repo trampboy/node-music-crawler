@@ -1,4 +1,6 @@
 'use strict';
 
-let playlist  = require('./discover')
-playlist.viewCapture(0)
+let discover  = require('./discover');
+let playlist = require('./playlist');
+// discover.viewCapture(0);
+playlist.viewCapture(822818142);

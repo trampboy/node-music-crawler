@@ -9,7 +9,7 @@ const MusicSuperAgent = require('./music-super-agent');
 const cheerio = require('cheerio');
 const sprintf = require('sprintf-js').sprintf;
 
-let playUrl = 'http://music.163.com/discover/playlist/';
+let playUrl = 'http://music.163.com/discover/playlist';
 
 function viewCapture(page) {
 
@@ -49,4 +49,7 @@ function insertPlaylist() {
 }
 
 exports.viewCapture = viewCapture;
+
+// For Test
+viewCapture(0)
 
