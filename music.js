@@ -7,7 +7,8 @@
 let MusicSuperAgent = require('./music-super-agent');
 let cheerio = require('cheerio');
 let crypto = require('crypto');
-const sprintf = require('sprintf-js').sprintf;
+let sprintf = require('sprintf-js').sprintf;
+let bigInt = require('big-integer');
 
 let MAX_PAGES = 1024;
 let modulus = '00e0b509f6259df8642dbc35662901477df22677ec152b5ff68ace615bb7b725152b3ab17a876aea8a5aa76d2e417629ec4ee341f56135fccf695280104e0312ecbda92557c93870114af6c9d05c4f7f0c3685b7a46bee255932575cce10b424d813cfe4875d3e82047b97ddef52741d546b8e289dc6935b3ece0462db0a22b8e7';
@@ -56,7 +57,7 @@ function viewComment(id, page) {
     let musicSuperAgent = new MusicSuperAgent();
     musicSuperAgent
         .post(url)
-        .send({params: createParams(page), encSecKey: encSecKey()})
+        .send({params: createParams(page), encSecKey: encSecKey})
         .end(function (err, data) {
             if (err) {
                 console.log('err:', err);
@@ -112,9 +113,12 @@ function random(len){
 
 
 function rsaEncrypt(text, pubKey, secKey) {
-    let data = text.reverse();
+    let data = text.split('').reverse().join('');
     let hex = new Buffer(data).toString('hex');
-    let rs = Math.pow(hex.parseInt(16), pubKey.parseInt(16)) % secKey.parseInt(16);
+    let iHex = parseInt(hex, 16);
+    let iPubKey = parseInt(pubKey, 16);
+    let iSecKey = parseInt(secKey, 16);
+    let rs = bigInt(iHex).pow(iPubKey).mod(iSecKey);
     let result = rs.toString(16);
     if (result.length >= 256) {
         return result.split(result.length - 256, result.length);
@@ -126,67 +130,29 @@ function rsaEncrypt(text, pubKey, secKey) {
     }
 }
 
-// private final static String modulus = "00e0b509f6259df8642dbc35662901477df22677ec152b5ff68ace615bb7" +
-//     "b725152b3ab17a876aea8a5aa76d2e417629ec4ee341f56135fccf695280" +
-//     "104e0312ecbda92557c93870114af6c9d05c4f7f0c3685b7a46bee255932" +
-//     "575cce10b424d813cfe4875d3e82047b97ddef52741d546b8e289dc6935b" +
-//     "3ece0462db0a22b8e7";
-//
-// private final static String nonce = "0CoJUm6Qyw8W8jud";
-// private final static String pubKey = "010001";
-//
-// private static final String PARAMS = "params";
-// private static final String ENCSECKEY = "encSecKey";
-//
-// public static Map<String, String> encrypt(String text) {
-//     String secKey = RandomStringUtils.random(16, "0123456789abcde");
-//     String encText = aesEncrypt(aesEncrypt(text, nonce), secKey);
-//     String encSecKey = rsaEncrypt(secKey, pubKey, modulus);
-//
-//     Map<String, String> map = new HashMap<String, String>();
-//     map.put(PARAMS, encText);
-//     map.put(ENCSECKEY, encSecKey);
-//     return map;
-// }
-//
-// private static String aesEncrypt(String text, String key) {
-//     try {
-//         IvParameterSpec iv = new IvParameterSpec("0102030405060708".getBytes("UTF-8"));
-//         SecretKeySpec skeySpec = new SecretKeySpec(key.getBytes("UTF-8"), "AES");
-//
-//         Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-//         cipher.init(Cipher.ENCRYPT_MODE, skeySpec, iv);
-//
-//         byte[] encrypted = cipher.doFinal(text.getBytes());
-//
-//         return new BASE64Encoder().encode(encrypted);
-//     } catch (Exception e) {
-//         return "";
-//     }
-// }
-//
-// private static String rsaEncrypt(String text, String pubKey, String modulus) {
-//     text = new StringBuilder(text).reverse().toString();
-//     BigInteger rs = new BigInteger(String.format("%x", new BigInteger(1, text.getBytes())), 16)
-//         .modPow(new BigInteger(pubKey, 16), new BigInteger(modulus, 16));
-//     String r = rs.toString(16);
-//     if (r.length() >= 256) {
-//         return r.substring(r.length() - 256, r.length());
-//     } else {
-//         while (r.length() < 256) {
-//             r = 0 + r;
-//         }
-//         return r;
-//     }
-// }
-
 
 // for test
 // viewSongUrl(109172);
 
 // let aesdata = aesEncrypt('{rid:"", offset:"0", total:"true", limit:"20", csrf_token:""}', '0CoJUm6Qyw8W8jud');
-// console.log('aesdata:', aesdata)
-//
-// let encData = rsaEncrypt()
+// console.log('aesdata:', aesdata);
+
+modulus = '00e0b509f6259df8642dbc35662901477df22677ec152b5ff68ace615bb7b725152b3ab17a876aea8a5aa76d2e417629ec4ee341f56135fccf695280104e0312ecbda92557c93870114af6c9d05c4f7f0c3685b7a46bee255932575cce10b424d813cfe4875d3e82047b97ddef52741d546b8e289dc6935b3ece0462db0a22b8e7';
+// modulus = '12344556'
+pubKey = '010001';
+// pubKey = '1'
+secKey = 'FFFFFFFFFFFFFFFF';
+let encData = rsaEncrypt(secKey, pubKey, modulus);
+console.log('encData:', encData);
+
+
+// text: FFFFFFFFFFFFFFFF
+// text: FFFFFFFFFFFFFFFF
+// hexText: 46464646464646464646464646464646
+// iHex: 93410845821434088009553813804799116870
+// iPubKey: 65537
+// iModulus: 157794750267131502212476817800345498121872783333389747424011531025366277535262539913701806290766479189477533597854989606803194253978660329941980786072432806427833685472618792592200595694346872951301770580765135349259590167490536138082469680638514416594216629258349130257685001248172188325316586707301643237607
+// rs: 26298514526120378617989563764200539980551128747038233341720922032422896004266777960750174725831502526157526636642731902802717191902401962471665777622958783348112857074113769747916124480482660524940161521943187517804392780022521505974483019404927056698963502894502425861465162968394012861423740369743551751036
+// data: 257348aecb5e556c066de214e531faadd1c55d814f9be95fd06d6bff9f4c7a41f831f6394d5a3fd2e3881736d94a02ca919d952872e7d0a50ebfa1769a7a62d512f5f1ca21aec60bc3819a9c3ffca5eca9a0dba6d6f7249b06f5965ecfff3695b54e1c28f3f624750ed39e7de08fc8493242e26dbc4484a01c76f739e135637c
 
 
