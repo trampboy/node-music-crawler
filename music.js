@@ -42,11 +42,10 @@ function viewSongUrl(id) {
                 return ;
             }
             console.log('viewSongUrl', data.text);
-            // let $ = cheerio.load(data.text);
-            // console.log();
-            // let commment = '';
-            // let musicId = id;
-            // let author = '';
+            let $ = cheerio.load(data.text);
+            let commment = '';
+            let musicId = id;
+            let author = '';
 
         });
 }
@@ -65,10 +64,9 @@ function viewComment(id, page) {
             }
             console.log('viewComment', data.text);
             // let $ = cheerio.load(data.text);
-            // console.log();
-            // let commment = '';
-            // let musicId = id;
-            // let author = '';
+            let commment = '';
+            let musicId = id;
+            let author = '';
 
         });
 
