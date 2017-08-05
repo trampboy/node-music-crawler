@@ -63,7 +63,7 @@ function viewComment(id, page) {
                 return ;
             }
             console.log('viewComment', data.text);
-            // let $ = cheerio.load(data.text);
+            let $ = cheerio.load(data.text);
             let commment = '';
             let musicId = id;
             let author = '';
