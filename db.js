@@ -1,9 +1,9 @@
-var mysql = require('mysql');
+let mysql = require('mysql');
 
-var connection = mysql.createConnection({
+let connection = mysql.createConnection({
 	host     : 'localhost',
 	user     : 'root',
-	password : '123456',
+	password : '',
 });
 
 function init() {
@@ -20,21 +20,22 @@ function init() {
 	close();
 }
 
-
 function createDatabase() {
 	let database = 'CREATE DATABASE music_crawler';
 	query(database);
 	console.log('create database success');
-
 }
-function query(sql) {
+
+function query(sql, cb) {
 	connection.query(sql, function(error, results, fields){
-		if (error) throw error;
-		console.log('fields:' + fields);
+        console.log('fields:' + fields + 'results:' + results);
 
-		return results;
+        if (cb === undefined) {
+            return;
+        }
+
+		cb(error, results, fields);
 	});
-
 }
 
 function createTables() {
@@ -57,4 +58,6 @@ function close() {
 	connection.destroy();
 }
 
-exports.init = init;
+module.init = init;
+module.query = query;
+module.close = close;
