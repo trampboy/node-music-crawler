@@ -5,14 +5,14 @@
  * get playlist from http://music.163.com/discover/playlist/?order=hot&cat=全部&limit=35&offset=
  */
 
-const MusicSuperAgent = require('./music-super-agent');
-const cheerio = require('cheerio');
-const sprintf = require('sprintf-js').sprintf;
+let MusicSuperAgent = require('./music-super-agent');
+let cheerio = require('cheerio');
+let sprintf = require('sprintf-js').sprintf;
+let db = require('./db');
 
 let playUrl = 'http://music.163.com/discover/playlist';
 
 function viewCapture(page) {
-
 	let pageOffset = page * 35;
 	console.log('url:' + playUrl);
 	let musicSuperAgent = new MusicSuperAgent();
@@ -32,24 +32,28 @@ function viewCapture(page) {
 				let link = $(v).attr('href');
 
 				console.log(sprintf('title:%1$s, link:%2$s', title, link));
-				if(!havePlaylist()) {
-					insertPlaylist();
+				if(!havePlaylist(title)) {
+					insertPlaylist(title, link);
 				}
 			});
 		});
 
 }
 
-function havePlaylist() {
-
+function havePlaylist(title) {
+	let sql = 'SELECT COUNT(title) FROM playlist163 WHERE title="' + title + '"';
+    db.query(sql);
+    db.close();
 }
 
-function insertPlaylist() {
-
+function insertPlaylist(title, link) {
+	let sql = 'INSERT INTO playlist163 (title, link) VALUE ("' + title + '", "' + link + '")';
+	db.query(sql);
+	db.close();
 }
 
 exports.viewCapture = viewCapture;
 
 // For Test
-viewCapture(0)
+// viewCapture(0)
 
