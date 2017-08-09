@@ -8,7 +8,7 @@
 let MusicSuperAgent = require('./../utils/music-super-agent');
 let cheerio = require('cheerio');
 let sprintf = require('sprintf-js').sprintf;
-let db = require('./../database/db');
+let db = require('./../database/database');
 
 let playUrl = 'http://music.163.com/discover/playlist';
 

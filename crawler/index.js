@@ -1,5 +1,5 @@
 'use strict';
-let db = require('./database/db');
+let db = require('./database/database');
 const MAX_PAGE = 40;
 
 let discover  = require('./pages/discover');
