@@ -1,3 +1,3 @@
-let db = require('./database/db')
+let db = require('./database/db');
 
-db.init()
+db.init();

@@ -1,25 +1,20 @@
 let mysql = require('mysql');
 
 let connection = mysql.createConnection({
-	host     : 'localhost',
-	user     : 'root',
-	password : '',
+    host     : 'localhost',
+    user     : 'root',
+    database : 'music_crawler'
 });
 
 function init() {
-	connection.connect(function(err) {
-		if (err) {
-			console.log('error connecting: ' + err.stack);
-			return false;
-		}
-		return true;
-	});
-	
-	createDatabase();
+	//TODO 如果mysql连接断开，则重新链接
+    connection.connect();
+	// createDatabase();
 	createTables();
-	close();
+	// close();
 }
 
+//TODO 如何没有数据库，则创建
 function createDatabase() {
 	let database = 'CREATE DATABASE music_crawler';
 	query(database);
@@ -27,14 +22,14 @@ function createDatabase() {
 }
 
 function query(sql, cb) {
-	connection.query(sql, function(error, results, fields){
-        console.log('fields:' + fields + 'results:' + results);
+	connection.query(sql, function(error, results){
+        console.log('error' + error + 'results:' + results);
 
         if (cb === undefined) {
             return;
         }
 
-		cb(error, results, fields);
+		cb(error, results);
 	});
 }
 
@@ -58,6 +53,4 @@ function close() {
 	connection.destroy();
 }
 
-module.init = init;
-module.query = query;
-module.close = close;
+exports.init = init;
