@@ -5,10 +5,11 @@
  */
 
 let MusicSuperAgent = require('./../utils/music-super-agent');
-let cheerio = require('cheerio');
+// let cheerio = require('cheerio');
 let crypto = require('crypto');
 let sprintf = require('sprintf-js').sprintf;
 let BigNumber = require('bignumber.js');
+let Buffer = require('Buffer');
 
 let MAX_PAGES = 1024;
 let modulus = '00e0b509f6259df8642dbc35662901477df22677ec152b5ff68ace615bb7b725152b3ab17a876aea8a5aa76d2e417629ec4ee341f56135fccf695280104e0312ecbda92557c93870114af6c9d05c4f7f0c3685b7a46bee255932575cce10b424d813cfe4875d3e82047b97ddef52741d546b8e289dc6935b3ece0462db0a22b8e7';
@@ -42,10 +43,10 @@ function viewSongUrl(id) {
                 return ;
             }
             console.log('viewSongUrl', data.text);
-            let $ = cheerio.load(data.text);
-            let commment = '';
-            let musicId = id;
-            let author = '';
+            // let $ = cheerio.load(data.text);
+            // let commment = '';
+            // let musicId = id;
+            // let author = '';
 
         });
 }
@@ -63,10 +64,10 @@ function viewComment(id, page) {
                 return ;
             }
             console.log('viewComment', data.text);
-            let $ = cheerio.load(data.text);
-            let commment = '';
-            let musicId = id;
-            let author = '';
+            // let $ = cheerio.load(data.text);
+            // let commment = '';
+            // let musicId = id;
+            // let author = '';
         });
 
 }
@@ -110,21 +111,21 @@ function random(len){
 
 
 function rsaEncrypt(text, pubKey, secKey) {
-    console.log('text:',text)
+    console.log('text:',text);
     let data = text.split('').reverse().join('');
-    console.log('text:',data)
+    console.log('text:',data);
     let hex = new Buffer(data).toString('hex');
-    console.log('hex:',hex)
+    console.log('hex:',hex);
     let iHex = new BigNumber(hex, 16);
-    console.log('iHex:',iHex)
+    console.log('iHex:',iHex);
     let iPubKey = new BigNumber(pubKey, 16);
-    console.log('iPubKey:',iPubKey)
+    console.log('iPubKey:',iPubKey);
     let iSecKey = new BigNumber(secKey, 16);
-    console.log('iSecKey:',iSecKey)
+    console.log('iSecKey:',iSecKey);
     let rs = iHex.pow(iPubKey).mod(iSecKey);
-    console.log('rs:',rs.toString())
+    console.log('rs:',rs.toString());
     let result = rs.toString(16);
-    console.log('result:',result)
+    console.log('result:',result);
     if (result.length >= 256) {
         return result.split(result.length - 256, result.length);
     } else {

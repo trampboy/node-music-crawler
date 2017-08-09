@@ -15,11 +15,11 @@ function init() {
 }
 
 //TODO 如何没有数据库，则创建
-function createDatabase() {
-	let database = 'CREATE DATABASE music_crawler';
-	query(database);
-	console.log('create database success');
-}
+// function createDatabase() {
+// 	let database = 'CREATE DATABASE music_crawler';
+// 	query(database);
+// 	console.log('create database success');
+// }
 
 function query(sql, cb) {
 	connection.query(sql, function(error, results){
@@ -49,8 +49,8 @@ function createTables() {
 	console.log('TABLES RECREATE SUCCESS');
 }
 
-function close() {
-	connection.destroy();
-}
+// function close() {
+// 	connection.destroy();
+// }
 
 exports.init = init;
