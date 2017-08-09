@@ -5,10 +5,10 @@
  * get playlist from http://music.163.com/discover/playlist/?order=hot&cat=全部&limit=35&offset=
  */
 
-let MusicSuperAgent = require('./music-super-agent');
+let MusicSuperAgent = require('./../utils/music-super-agent');
 let cheerio = require('cheerio');
 let sprintf = require('sprintf-js').sprintf;
-let db = require('./db');
+let db = require('./../database/db');
 
 let playUrl = 'http://music.163.com/discover/playlist';
 

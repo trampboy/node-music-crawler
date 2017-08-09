@@ -4,7 +4,7 @@
  * get music from http://music.163.com/song?id=109172
  */
 
-let MusicSuperAgent = require('./music-super-agent');
+let MusicSuperAgent = require('./../utils/music-super-agent');
 let cheerio = require('cheerio');
 let crypto = require('crypto');
 let sprintf = require('sprintf-js').sprintf;
@@ -67,7 +67,6 @@ function viewComment(id, page) {
             let commment = '';
             let musicId = id;
             let author = '';
-
         });
 
 }
@@ -139,6 +138,7 @@ function rsaEncrypt(text, pubKey, secKey) {
 
 // for test
 // viewSongUrl(109172);
+viewCapture(109172);
 
 // let aesdata = aesEncrypt('{rid:"", offset:"0", total:"true", limit:"20", csrf_token:""}', '0CoJUm6Qyw8W8jud');
 // console.log('aesdata:', aesdata);
@@ -164,5 +164,8 @@ function rsaEncrypt(text, pubKey, secKey) {
 // let z = new BigNumber(11);       // "1306.25"
 // console.log('result:', x.pow(y));
 
-let len = '257348aecb5e556c066de214e531faadd1c55d814f9be95fd06d6bff9f4c7a41f831f6394d5a3fd2e3881736d94a02ca919d952872e7d0a50ebfa1769a7a62d512f5f1ca21aec60bc3819a9c3ffca5eca9a0dba6d6f7249b06f5965ecfff3695b54e1c28f3f624750ed39e7de08fc8493242e26dbc4484a01c76f739e135637c'.length
-console.log('len:', len);
+// l0DReXb5aAvihEQDNTMbTa7+nPPGN/H00lOvE/h4C7Jbe8xoNDCJD7J4fMb+crzbZbu19Fk/icpW+RfQSWqvxA==
+// let text = '{rid:"", offset:"0", total:"true", limit:"20", csrf_token:""}';
+// let nonce = '0CoJUm6Qyw8W8jud';
+// let data = aesEncrypt(text, nonce);
+// console.log('data:' + data);

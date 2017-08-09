@@ -4,7 +4,7 @@
  * Created by BuEr on 28/07/2017.
  */
 
-const MusicSuperAgent = require('./music-super-agent');
+const MusicSuperAgent = require('./../utils/music-super-agent');
 const cheerio = require('cheerio');
 const sprintf = require('sprintf-js').sprintf;
 
