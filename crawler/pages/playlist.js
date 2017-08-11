@@ -4,9 +4,10 @@
  * Created by BuEr on 28/07/2017.
  */
 
-const MusicSuperAgent = require('./../utils/music-super-agent');
-const cheerio = require('cheerio');
-const sprintf = require('sprintf-js').sprintf;
+let MusicSuperAgent = require('./../utils/music-super-agent');
+let cheerio = require('cheerio');
+let sprintf = require('sprintf-js').sprintf;
+let musicDao = require('../dao/music-dao');
 
 let playUrl = 'http://music.163.com/playlist';
 
@@ -31,7 +32,15 @@ function viewCapture(id) {
                 let name = value['name'];
                 let author = value['artists'][0]['name'];
                 let songId= value['id'];
-                console.log(sprintf('name:%1$s, songId:%2$s, href:%3$s', name, songId, author));
+                console.log(sprintf('name:%1$s, songId:%2$s, author:%3$s', name, songId, author));
+                musicDao.hasContain(name)
+                    .then(function (result) {
+                        if (!result) {
+                            musicDao.insert({name:name, songId:songId, author:author}).catch(function (err) {
+                                console.log('err:', err);
+                            });
+                        }
+                    });
             }
         });
 }
@@ -39,4 +48,4 @@ function viewCapture(id) {
 exports.viewCapture = viewCapture;
 
 // For Test
-viewCapture(822818142);
+// viewCapture(822818142);
