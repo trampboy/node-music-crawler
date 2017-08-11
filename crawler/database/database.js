@@ -23,8 +23,11 @@ function Database() {
 	// }
 
     this.query = function (sql, cb) {
+        console.log('query sql:' + sql);
         connection.query(sql, function(error, results){
-            console.log('error' + error + 'results:' + results);
+            if (error) {
+                console.log('error' + error + 'results:' + results);
+            }
 
             if (cb === undefined) {
                 return;
@@ -56,4 +59,4 @@ function Database() {
 	// }
 }
 
-exports.module = Database;
+module.exports = Database;

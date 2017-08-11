@@ -8,7 +8,8 @@
 let MusicSuperAgent = require('./../utils/music-super-agent');
 let cheerio = require('cheerio');
 let sprintf = require('sprintf-js').sprintf;
-let db = require('./../database/database');
+let PlaylistDao = require('./../dao/playlist-dao');
+let playlistDao = new PlaylistDao();
 
 let playUrl = 'http://music.163.com/discover/playlist';
 
@@ -32,28 +33,20 @@ function viewCapture(page) {
 				let link = $(v).attr('href');
 
 				console.log(sprintf('title:%1$s, link:%2$s', title, link));
-				if(!havePlaylist(title)) {
-					insertPlaylist(title, link);
-				}
+				playlistDao
+					.hasTitle(title)
+					.then(function (result) {
+						if (!result) {
+                            playlistDao.insert({title: title, link: link});
+						}
+					});
 			});
 		});
 
 }
 
-function havePlaylist(title) {
-	let sql = 'SELECT COUNT(title) FROM playlist163 WHERE title="' + title + '"';
-    db.query(sql);
-    db.close();
-}
-
-function insertPlaylist(title, link) {
-	let sql = 'INSERT INTO playlist163 (title, link) VALUE ("' + title + '", "' + link + '")';
-	db.query(sql);
-	db.close();
-}
-
 exports.viewCapture = viewCapture;
 
 // For Test
-// viewCapture(0)
+viewCapture(0);
 
