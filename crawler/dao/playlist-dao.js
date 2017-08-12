@@ -5,11 +5,10 @@
 let Database = require('../database/database');
 let sprintf = require('sprintf-js').sprintf;
 let tableName = 'playlist163';
+let db = new Database();
 
-function PlaylistDao() {
-    let db = new Database();
-    // id, title, link, create_time,
-    this.insert = function (data) {
+class PlaylistDao {
+    insert(data) {
         let sql = sprintf('INSERT into %1$s (title, link) values(\"%2$s\", \"%3$s\")', tableName, data.title, data.link);
         return new Promise(function (resolve, reject) {
             db.query(sql, function (err, result) {
@@ -21,20 +20,34 @@ function PlaylistDao() {
                 }
             });
         });
-    };
+    }
 
-    this.hasTitle = function (title) {
+    hasTitle(title) {
         let sql = sprintf('SELECT COUNT(title) as count FROM %1$s WHERE title=\"%2$s\"', tableName, title);
         return new Promise(function (resolve, reject) {
-            db.query(sql, function (err, result) {
+            db.query(sql, function (err, results) {
                 if (err) {
                     reject(err);
                 } else {
-                    resolve(result[0].count > 0);
+                    resolve(results[0].count > 0);
                 }
             });
         });
-    };
+    }
+
+    getAll() {
+        let sql = sprintf('SELECT * from %1$s ', tableName);
+        return new Promise(function (resolve, reject) {
+            db.query(sql, function (err, results) {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(results);
+                }
+            });
+        });
+    }
 }
 
-module.exports = PlaylistDao;
+let playListDao = new PlaylistDao();
+module.exports = playListDao;

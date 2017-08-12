@@ -9,23 +9,21 @@ let cheerio = require('cheerio');
 let sprintf = require('sprintf-js').sprintf;
 let musicDao = require('../dao/music-dao');
 
-let playUrl = 'http://music.163.com/playlist';
+let playUrl = 'http://music.163.com';
 
-function viewCapture(id) {
+function viewCapture(link) {
     let musicSuperAgent = new MusicSuperAgent();
-    console.log('id:', id);
     musicSuperAgent
-        .get(playUrl)
-        .query({id:id})
+        .get(playUrl + link)
         .end(function (err, sres) {
             if (err) {
                 console.log('viewCapture err:', err);
                 return;
             }
-            console.log('sres.text:', sres.text);
+            // console.log('sres.text:', sres.text);
             let $ = cheerio.load(sres.text);
             let textarea = JSON.parse($('div#song-list-pre-cache textarea').text());
-            console.log('textarea', textarea);
+            // console.log('textarea', textarea);
             for(let index in textarea) {
                 let value = textarea[index];
                 console.log(sprintf('index:%1$s,value:%2$s', index, value));
@@ -48,4 +46,4 @@ function viewCapture(id) {
 exports.viewCapture = viewCapture;
 
 // For Test
-// viewCapture(822818142);
+// viewCapture('/playlist?id=822818142');

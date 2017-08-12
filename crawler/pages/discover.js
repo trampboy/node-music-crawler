@@ -8,8 +8,7 @@
 let MusicSuperAgent = require('./../utils/music-super-agent');
 let cheerio = require('cheerio');
 let sprintf = require('sprintf-js').sprintf;
-let PlaylistDao = require('./../dao/playlist-dao');
-let playlistDao = new PlaylistDao();
+let playlistDao = require('./../dao/playlist-dao');
 
 let playUrl = 'http://music.163.com/discover/playlist';
 
@@ -48,5 +47,5 @@ function viewCapture(page) {
 exports.viewCapture = viewCapture;
 
 // For Test
-viewCapture(0);
+// viewCapture(0);
 
