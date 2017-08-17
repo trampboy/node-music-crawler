@@ -4,7 +4,7 @@
   "description": "music crawler,write it by node",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/trampboy/node-music-crawler#readme",
   "dependencies": {
+    "bignum": "^0.12.5",
     "bignumber.js": "^4.0.2",
     "cheerio": "^1.0.0-rc.2",
     "mysql": "^2.14.0",
@@ -29,8 +30,5 @@
   },
   "devDependencies": {
     "jest": "^20.0.4"
-  },
-  "scripts": {
-    "test": "jest"
   }
 }
