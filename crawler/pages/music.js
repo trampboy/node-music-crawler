@@ -5,7 +5,7 @@
  */
 
 let MusicSuperAgent = require('./../utils/music-super-agent');
-// let cheerio = require('cheerio');
+let cheerio = require('cheerio');
 let crypto = require('crypto');
 let sprintf = require('sprintf-js').sprintf;
 let BigNumber = require('bignum');
@@ -21,7 +21,7 @@ function viewCapture(id, page = 1) {
 }
 
 function viewSongUrl(id) {
-    let url = 'http://music.163.com/song?id=' + id;
+    let url = 'http://music.163.com/song';
     new MusicSuperAgent()
         .get(url)
         .query({id: id})
@@ -30,11 +30,12 @@ function viewSongUrl(id) {
                 console.log('err:', err);
                 return ;
             }
-            console.log('viewSongUrl', data.text);
-            // let $ = cheerio.load(data.text);
-            // let commment = '';
-            // let musicId = id;
-            // let author = '';
+            let $ = cheerio.load(data.text);
+            let title = $('em.f-ff2').text();
+            let musicId = id;
+            let author = $('span')[1].attribs.title;
+            console.log(sprintf('title:%1$s, musicId:%2$s, author:%3$s', title, musicId, author));
+
 
         });
 }
@@ -42,9 +43,7 @@ function viewSongUrl(id) {
 function viewComment(id, page) {
     let url  = 'http://music.163.com/weapi/v1/resource/comments/R_SO_4_' + id + '/?csrf_token=';
     let getEncSecKey = rsaEncrypt(secKey, pubKey, modulus);
-    console.log('encSecKey:', getEncSecKey);
     let getParams = createParams(page);
-    console.log('params:', getParams);
     let musicSuperAgent = new MusicSuperAgent();
     musicSuperAgent
         .post(url)
@@ -55,15 +54,14 @@ function viewComment(id, page) {
                 return ;
             }
 
-            console.log('viewComment', data.text);
             let hotComments = JSON.parse(data.text).hotComments;
             console.log('hotComments', hotComments);
             for (let index in hotComments) {
                 let userComment = hotComments[index];
                 let comment = userComment.content;
-                let musicId = id;
                 let author = userComment.user.nickname;
-                console.log(sprintf('author:%1$s, musicId:%2$s, comment:%3$s', author, musicId, comment));
+                let musicId = id;
+                console.log(sprintf('author:%1$s, comment:%2$s, musicId:%3$s', author, comment, musicId));
             }
         });
 
@@ -78,12 +76,9 @@ function createParams(page) {
         offset = (page-1)*20;
         text = sprintf('{rid:"", offset:"%1$s", total:"false", limit:"20", csrf_token:""}', offset);
     }
-    console.log('createParams text:', text);
     let nonce   = '0CoJUm6Qyw8W8jud';
     let result = aesEncrypt(text, nonce);
-    console.log('result:', result);
     result = aesEncrypt(result, secKey);
-    console.log('result:', result);
     return result;
 }
 
@@ -112,21 +107,13 @@ function random(len){
 
 
 function rsaEncrypt(text, pubKey, secKey) {
-    console.log('text:',text);
     let data = text.split('').reverse().join('');
-    console.log('text:',data);
     let hex = new Buffer(data).toString('hex');
-    console.log('hex:',hex);
     let iHex = new BigNumber(hex, 16);
-    console.log('iHex:',iHex);
     let iPubKey = new BigNumber(pubKey, 16);
-    console.log('iPubKey:',iPubKey);
     let iSecKey = new BigNumber(secKey, 16);
-    console.log('iSecKey:',iSecKey);
     let rs = iHex.pow(iPubKey).mod(iSecKey);
-    console.log('rs:',rs.toString());
     let result = rs.toString(16);
-    console.log('result:',result);
     if (result.length >= 256) {
         return result.substr(result.length - 256, result.length);
     } else {
@@ -139,5 +126,4 @@ function rsaEncrypt(text, pubKey, secKey) {
 
 
 // for test
-// viewSongUrl(109172);
 viewCapture(109172, 1, 3);
