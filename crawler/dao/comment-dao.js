@@ -9,7 +9,7 @@ let db = new Database();
 
 class CommentDao {
     insert(data) {
-        let sql = sprintf('INSERT into %1$s (title, comment, musicId) values(\"%2$s\", \"%3$s\", \"%4$s\")', tableName, data.title, data.comment, data.musicId);
+        let sql = sprintf('INSERT into %1$s (txt, music_id, author) values(\"%2$s\", \"%3$s\", \"%4$s\")', tableName, data.comment, data.musicId, data.author);
         return new Promise(function (resolve, reject) {
             db.query(sql, function (err, result) {
                 if (err) {
@@ -23,14 +23,14 @@ class CommentDao {
 ;    }
 
     hasComment(comment) {
-        let sql = sprintf('SELECT count(comment) as count FROM %1$s where comment=\"%2$s\"', tableName, comment);
+        let sql = sprintf('SELECT count(txt) as count FROM %1$s where txt=\"%2$s\"', tableName, comment);
         return new Promise(function (resolve, reject) {
             db.query(sql, function (err, result) {
                 if (err) {
                     console.log('hasComment error in CommentDao');
                     reject(err);
                 } else {
-                    resolve(result);
+                    resolve(result[0].count > 0);
                 }
             });
         });

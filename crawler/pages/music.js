@@ -9,11 +9,12 @@ let cheerio = require('cheerio');
 let crypto = require('crypto');
 let sprintf = require('sprintf-js').sprintf;
 let BigNumber = require('bignum');
+let commentDao = require('../dao/comment-dao');
 
 let modulus = '00e0b509f6259df8642dbc35662901477df22677ec152b5ff68ace615bb7b725152b3ab17a876aea8a5aa76d2e417629ec4ee341f56135fccf695280104e0312ecbda92557c93870114af6c9d05c4f7f0c3685b7a46bee255932575cce10b424d813cfe4875d3e82047b97ddef52741d546b8e289dc6935b3ece0462db0a22b8e7';
 let pubKey  = '010001';
 let secKey = random(16);
-// let secKey = 'FFFFFFFFFFFFFFFF';
+
 
 function viewCapture(id, page = 1) {
     viewComment(id, page);
@@ -55,13 +56,20 @@ function viewComment(id, page) {
             }
 
             let hotComments = JSON.parse(data.text).hotComments;
-            console.log('hotComments', hotComments);
+            // console.log('hotComments', hotComments);
             for (let index in hotComments) {
                 let userComment = hotComments[index];
                 let comment = userComment.content;
                 let author = userComment.user.nickname;
                 let musicId = id;
                 console.log(sprintf('author:%1$s, comment:%2$s, musicId:%3$s', author, comment, musicId));
+                commentDao.hasComment(comment)
+                    .then(function (result) {
+                        if (!result) {
+                            console.log(sprintf('add new author:%1$s, comment:%2$s, musicId:%3$s', author, comment, musicId));
+                            commentDao.insert({comment: comment, musicId: musicId, author:author});
+                        }
+                    });
             }
         });
 
