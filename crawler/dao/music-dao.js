@@ -23,6 +23,19 @@ class MusicDao {
         });
     }
 
+    getAll() {
+        let sql = sprintf('SELECT * FROM %1$s', tableName);
+        return new Promise(function (resolve, reject) {
+           db.query(sql, function (err, results) {
+              if (err){
+                  reject(err);
+              } else {
+                  resolve(results);
+              }
+           });
+        });
+    }
+
     hasContain(name) {
         let sql = sprintf('SELECT COUNT(*) from %1$s where name=\"%2$s\"', tableName, name);
         return new Promise(function (resolve, reject) {

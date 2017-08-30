@@ -62,7 +62,7 @@ function viewComment(id, page) {
                 let comment = userComment.content;
                 let author = userComment.user.nickname;
                 let musicId = id;
-                console.log(sprintf('author:%1$s, comment:%2$s, musicId:%3$s', author, comment, musicId));
+                // console.log(sprintf('author:%1$s, comment:%2$s, musicId:%3$s', author, comment, musicId));
                 commentDao.hasComment(comment)
                     .then(function (result) {
                         if (!result) {
@@ -132,6 +132,6 @@ function rsaEncrypt(text, pubKey, secKey) {
     }
 }
 
-
+exports.viewCapture = viewCapture;
 // for test
-viewCapture(109172, 1, 3);
+// viewCapture(350840);
